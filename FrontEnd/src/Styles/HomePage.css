@@ -1,0 +1,15 @@
+.BannerCont{
+    background-image: url('../../public/banner4.jpg');
+}
+
+.BannerContent{
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.Title{
+    font-family: Montserat;
+    font-size: 35;
+    font-weight: bold;
+}

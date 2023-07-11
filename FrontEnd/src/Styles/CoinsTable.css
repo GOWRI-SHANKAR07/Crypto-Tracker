@@ -1,0 +1,26 @@
+/* .Row{
+
+} */
+
+.Cell{
+    display: flex;
+    flex-direction: row;
+    gap: 15;
+}
+
+.TableCont{
+    display: flex;
+    flex-direction: column;
+}
+
+.CoinTxt{
+    text-transform: uppercase;
+}
+
+.Row{
+    cursor: pointer;
+}
+
+.Row:hover {
+    background-color: #131111;
+}

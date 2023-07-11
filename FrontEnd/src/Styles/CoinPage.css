@@ -1,0 +1,26 @@
+.Container{
+    display: flex;
+    flex-direction: row;
+}
+
+.SideBar{ 
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    align-items: center;
+    margin-top: 25;
+    border-right: 2px solid grey;
+}
+
+.Typo{
+    display: flex;
+    flex-direction: row;
+}
+
+.InfoCont{
+    display: flex;
+    flex-direction: column;
+    width: 70%;   
+    align-items: center;
+    justify-content: center;
+}
