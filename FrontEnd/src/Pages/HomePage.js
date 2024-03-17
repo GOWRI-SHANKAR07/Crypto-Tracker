@@ -8,8 +8,8 @@ const HomePage = () => {
     <>
       <Banner />
       <CoinsTable />
-    </> 
+    </>
   );
-}  
+};
 
 export default HomePage;

@@ -1,21 +1,20 @@
-import axios from 'axios';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from './Firebase';
-import { CoinList } from './Config/api';
-
+import axios from "axios";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { auth, db } from "./Firebase";
+import { CoinList } from "./Config/api";
 
 const Crypto = createContext();
 
 const CryptoContext = ({ children }) => {
-  const [currency, setCurrency] = useState('INR');
-  const [symbol, setSymbol] = useState('₹');
+  const [currency, setCurrency] = useState("INR");
+  const [symbol, setSymbol] = useState("₹");
   const [user, setUser] = useState(null);
   const [alert, setAlert] = useState({
     open: false,
     message: " ",
-    type: "success"
+    type: "success",
   });
 
   const [watchlist, setWatchlist] = useState([]);
@@ -48,11 +47,16 @@ const CryptoContext = ({ children }) => {
   }, []);
 
   const fetchCoins = async () => {
-    setLoading(true);
-    const { data } = await axios.get(CoinList(currency));
-
-    setCoins(data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { data } = await axios.get(CoinList(currency));
+      setCoins(data);
+    } catch (error) {
+      console.error("Error fetching coins:", error);
+      // Handle error appropriately (e.g., show an error message to the user)
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -75,8 +79,7 @@ const CryptoContext = ({ children }) => {
         coins,
         loading,
         watchlist,
-      }}
-    >
+      }}>
       {children}
     </Crypto.Provider>
   );

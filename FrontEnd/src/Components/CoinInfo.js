@@ -1,36 +1,48 @@
-import { CircularProgress, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Line } from 'react-chartjs-2';
-import { HistoricalChart } from '../Config/api';
-import { chartDays } from '../Config/data';
-import { CryptoState } from '../CryptoContext';
-import '../Styles/CoinPage.css';
-import SelectButton from './SelectButton';
-import { CategoryScale } from 'chart.js';
-import Chart from 'chart.js/auto';
-import UserSidebar from './Authentication/UserSlidebar';
-import AuthModal from './Authentication/AuthModal';
+import {
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import { HistoricalChart } from "../Config/api";
+import { chartDays } from "../Config/data";
+import { CryptoState } from "../CryptoContext";
+import "../Styles/CoinPage.css";
+import SelectButton from "./SelectButton";
+import { CategoryScale } from "chart.js";
+import Chart from "chart.js/auto";
+import UserSidebar from "./Authentication/UserSlidebar";
+import AuthModal from "./Authentication/AuthModal";
 Chart.register(CategoryScale);
 
 const CoinInfo = ({ coin }) => {
-
   const [historicData, setHistoricData] = useState(coin);
   const [days, setDays] = useState(1);
   const { currency, setCurrency, user } = CryptoState();
   const [flag, setflag] = useState(false);
 
+  console.log(coin, days, currency, " GSHJ");
 
   const fetchHistoricData = async () => {
-    const response = await axios.get(HistoricalChart(coin.id, days, currency));
-    setflag(true);
-    setHistoricData(response.data.prices);
+    try {
+      const response = await axios.get(
+        HistoricalChart(coin.id, days, currency)
+      );
+      setflag(true);
+      setHistoricData(response.data.prices);
+    } catch (error) {
+      console.error("Error fetching historic data:", error);
+      // Handle the error appropriately (e.g., display an error message to the user)
+    }
   };
-  console.log(historicData);
 
   useEffect(() => {
     fetchHistoricData();
-  }, [])
+  }, []);
 
   useEffect(() => {
     fetchHistoricData();
@@ -38,23 +50,17 @@ const CoinInfo = ({ coin }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency, days]);
 
-
-
   return (
-    <div className='InfoCont'
+    <div
+      className="InfoCont"
       style={{
         marginLeft: 20,
         padding: 40,
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
-      {!historicData | flag === false ? (
-        <CircularProgress
-          style={{ color: "gold" }}
-          size={250}
-          thickness={1}
-        />
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+      {!historicData | (flag === false) ? (
+        <CircularProgress style={{ color: "gold" }} size={250} thickness={1} />
       ) : (
         <>
           <Line
@@ -84,37 +90,31 @@ const CoinInfo = ({ coin }) => {
               },
             }}
           />
-          
         </>
-      )
-      
-      }
+      )}
       <div
-            style={{
-              display: "flex",
-              marginTop: 20,
-              justifyContent: "space-around",
-              width: "100%",
+        style={{
+          display: "flex",
+          marginTop: 20,
+          justifyContent: "space-around",
+          width: "100%",
+        }}>
+        {chartDays.map((day) => (
+          <SelectButton
+            key={day.value}
+            onClick={() => {
+              setDays(day.value);
+              setflag(false);
             }}
-          >
-            {chartDays.map((day) => (
-              <SelectButton
-                key={day.value}
-                onClick={() => {
-                  setDays(day.value);
-                  setflag(false);
-                }}
-                selected={day.value === days}
-              >
-                {day.label}
-              </SelectButton>
-            ))}
-          </div>
+            selected={day.value === days}>
+            {day.label}
+          </SelectButton>
+        ))}
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default CoinInfo;
 
 // how to send automatic mail to the authenticated user about the details of the cryptocurrency coins that they added in their wishlist in react js
-

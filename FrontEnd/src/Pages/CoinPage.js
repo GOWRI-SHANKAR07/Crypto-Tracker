@@ -1,22 +1,20 @@
-import { Button, LinearProgress, Typography } from '@mui/material';
-import { fontWeight } from '@mui/system';
-import axios from 'axios';
-import HTMLReactParser from 'html-react-parser';
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import CoinInfo from '../Components/CoinInfo';
-import { SingleCoin } from '../Config/api'
-import { CryptoState } from '../CryptoContext';
-import '../Styles/CoinPage.css'
-import { numberWithCommas } from '../Components/CoinsTable';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../Firebase';
-import { makeStyles } from '@material-ui/core';
-
+import { Button, LinearProgress, Typography } from "@mui/material";
+import { fontWeight } from "@mui/system";
+import axios from "axios";
+import HTMLReactParser from "html-react-parser";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import CoinInfo from "../Components/CoinInfo";
+import { SingleCoin } from "../Config/api";
+import { CryptoState } from "../CryptoContext";
+import "../Styles/CoinPage.css";
+import { numberWithCommas } from "../Components/CoinsTable";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../Firebase";
+import { makeStyles } from "@material-ui/core";
 
 const CoinPage = () => {
-
-  const {id}  = useParams();
+  const { id } = useParams();
 
   const [coin, setCoin] = useState([]);
 
@@ -25,12 +23,14 @@ const CoinPage = () => {
   const { currency, symbol, user, setAlert, watchlist } = CryptoState();
 
   const fetchCoin = async () => {
-    const response = await axios.get(`http://localhost:3000/coin?id=${id}`);
-    setCoin(response.data[0]);
+    const response = await axios.get(
+      `http://localhost:3000/currentcoin?id=${id}`
+    );
+    console.log(response.data, " RES");
+    setCoin(response.data);
   };
 
-  console.log(coin);
-
+  console.log(id);
 
   useEffect(() => {
     fetchCoin();
@@ -166,8 +166,7 @@ const CoinPage = () => {
               variant="h5"
               style={{
                 fontFamily: "Montserrat",
-              }}
-            >
+              }}>
               {numberWithCommas(coin?.market_cap_rank)}
             </Typography>
           </span>
@@ -180,12 +179,8 @@ const CoinPage = () => {
               variant="h5"
               style={{
                 fontFamily: "Montserrat",
-              }}
-            >
-              {symbol}{" "}
-              {numberWithCommas(
-                coin?.current_price
-              )}
+              }}>
+              {symbol} {numberWithCommas(coin?.current_price)}
             </Typography>
           </span>
           <span style={{ display: "flex" }}>
@@ -197,13 +192,8 @@ const CoinPage = () => {
               variant="h5"
               style={{
                 fontFamily: "Montserrat",
-              }}
-            >
-              {symbol}{" "}
-              {numberWithCommas(
-                coin?.market_cap
-              )}
-              M
+              }}>
+              {symbol} {numberWithCommas(coin?.market_cap)}M
             </Typography>
           </span>
           {user && (
@@ -214,12 +204,11 @@ const CoinPage = () => {
                 height: 40,
                 backgroundColor: inWatchlist ? "#ff0000" : "gold",
                 color: inWatchlist ? "white" : "black",
-                fontWeight: 'bolder',
+                fontWeight: "bolder",
                 fontFamily: "Montserrat",
                 marginTop: 25,
               }}
-              onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
-            >
+              onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}>
               {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
             </Button>
           )}
