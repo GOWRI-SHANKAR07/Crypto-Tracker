@@ -22,15 +22,15 @@ const CoinPage = () => {
 
   const { currency, symbol, user, setAlert, watchlist } = CryptoState();
 
+  console.log(id, " ID");
+
   const fetchCoin = async () => {
     const response = await axios.get(
       `http://localhost:3000/currentcoin?id=${id}`
     );
     console.log(response.data, " RES");
-    setCoin(response.data);
+    setCoin(response.data[0]);
   };
-
-  console.log(id);
 
   useEffect(() => {
     fetchCoin();
@@ -140,6 +140,8 @@ const CoinPage = () => {
   const classes = useStyles();
 
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
+
+  console.log(coin?.name, " DATAS");
 
   return (
     <div className={classes.container}>

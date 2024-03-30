@@ -25,7 +25,7 @@ const CoinInfo = ({ coin }) => {
   const { currency, setCurrency, user } = CryptoState();
   const [flag, setflag] = useState(false);
 
-  console.log(coin, days, currency, " GSHJ");
+  console.log(coin.id, days, currency, " GSHJ");
 
   const fetchHistoricData = async () => {
     try {
@@ -40,15 +40,15 @@ const CoinInfo = ({ coin }) => {
     }
   };
 
-  useEffect(() => {
-    fetchHistoricData();
-  }, []);
+  // useEffect(() => {
+  //   fetchHistoricData();
+  // }, []);
 
   useEffect(() => {
-    fetchHistoricData();
-    console.log("hi");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currency, days]);
+    if (coin.id && currency && days) {
+      fetchHistoricData();
+    }
+  }, [coin, currency, days]);
 
   return (
     <div
